@@ -1,7 +1,14 @@
 import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
 function App() {
+  const handleClick = async (e) => {
+    const data = await axios.post('/api/v1/login', { username: 'admin', password: 'admin' });
+    console.log('handleClick: ');
+    console.log(data);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,6 +25,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <button onClick={handleClick}>Send request</button>
     </div>
   );
 }
