@@ -1,2 +1,1 @@
-web: make start-frontend
-worker: make start-backend
+web: make remote-start
