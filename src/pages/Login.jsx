@@ -8,19 +8,19 @@ import routes from '../routes';
 import Input from '../formElements/Input';
 import AuthContext from '../contexts/AuthContext';
 
-const schema = yup.object({
-  username: yup.string()
-    .min(2, 'Логин должен содержать не менее 2 символов')
-    .required('Обязательное поле'),
-  password: yup.string()
-    .min(5, 'Пароль должен содержать не менее 5 символов')
-    .required('Обязательное поле'),
-});
-
 const Login = () => {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  const schema = yup.object({
+    username: yup.string()
+      .min(2, 'Логин должен содержать не менее 2 символов')
+      .required('Обязательное поле'),
+    password: yup.string()
+      .min(5, 'Пароль должен содержать не менее 5 символов')
+      .required('Обязательное поле'),
+  });
 
   useEffect(() => {
     if (auth.userIsLogged()) {
