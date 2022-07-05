@@ -7,7 +7,7 @@ import Chat from '../pages/Chat';
 import NotFound from '../pages/NotFound';
 import AuthContext from '../contexts/AuthContext';
 
-function App() {
+const AuthProvider = ({ children }) => {
   const userIsLogged = () => localStorage.getItem('userId') ? true : false;
   const [logged, setLogged] = useState(userIsLogged());
 
@@ -21,8 +21,25 @@ function App() {
     setLogged(false);
   };
 
+  const getAuthHeader = () => {
+    if (!logged) {
+      return {};
+    }
+
+    const token = localStorage.getItem('userId');
+    return { Authorization: `Bearer ${token}` };
+  };
+
   return (
-    <AuthContext.Provider value={{logged, logIn, logOut, userIsLogged }}>
+    <AuthContext.Provider value={{logged, logIn, logOut, userIsLogged, getAuthHeader }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
       <Container fluid className="App vh-100">
         <BrowserRouter>
           <Header />
@@ -33,7 +50,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </Container>
-    </AuthContext.Provider>
+    </AuthProvider>
   );
 }
 

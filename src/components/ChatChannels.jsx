@@ -1,9 +1,22 @@
 import React from 'react';
 import { Button, Nav, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { PlusCircle } from 'react-bootstrap-icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectors, setCurrentChannelId } from '../store/channelsSlice';
 
 const ChatChannels = () => {
-  const handleClick = (channel) => (e) => {
+  const channels = useSelector(selectors.selectAll);
+  const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
+  const dispatch = useDispatch();
+
+  const select = (channelId) => () => {
+    dispatch(setCurrentChannelId(channelId));
+  };
+
+  const remove = (channel) => (e) => {
+    console.log(channel);
+  };
+  const rename = (channel) => (e) => {
     console.log(channel);
   };
 
@@ -19,24 +32,34 @@ const ChatChannels = () => {
       </div>
 
       <Nav fill variant="pills" className="d-flex flex-column">
-        <Nav.Item>
-          <Button variant="light" className="w-100 text-start" onClick={handleClick('general')}><span>#</span> general</Button>
-        </Nav.Item>
+        {channels.map(({ id, name, removable }) => {
+          const buttonStyle = id === currentChannelId ? 'secondary' : 'light';
 
-        <Nav.Item>
-          <Button variant="light" className="w-100 text-start" onClick={handleClick('random')}><span>#</span> random</Button>
-        </Nav.Item>
+          if (!removable) {
+            return (
+              <Nav.Item key={id}>
+                <Button variant={buttonStyle} className="w-100 text-start" onClick={select(id)}>
+                  <span>#</span> {name}
+                </Button>
+              </Nav.Item>
+            );
+          }
 
-        <Nav.Item>
-          <Dropdown as={ButtonGroup} className="w-100">
-            <Button variant="light" className="text-start" onClick={handleClick('test')}><span>#</span> test</Button>
-            <Dropdown.Toggle split className="flex-grow-0 btn btn-light text-end" />
-            <Dropdown.Menu>
-              <Dropdown.Item>Удалить</Dropdown.Item>
-              <Dropdown.Item>Переименовать</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Nav.Item>
+          return (
+            <Nav.Item key={id}>
+              <Dropdown as={ButtonGroup} className="w-100">
+                <Button variant={buttonStyle} className="text-start" onClick={select(id)}>
+                  <span>#</span> {name}
+                </Button>
+                <Dropdown.Toggle split variant={buttonStyle} className="flex-grow-0 text-end" />
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={remove(id)}>Удалить</Dropdown.Item>
+                  <Dropdown.Item onClick={rename(id)}>Переименовать</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav.Item>
+          );
+        })}
       </Nav>
     </>
   );

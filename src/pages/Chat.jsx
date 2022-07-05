@@ -1,20 +1,39 @@
 import React, { useEffect, useContext } from 'react';
+import { useDispatch, batch } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import AuthContext from '../contexts/AuthContext';
 import ChatChannels from '../components/ChatChannels';
 import ChatHeader from '../components/ChatHeader';
 import ChatMessageForm from '../components/ChatMessageForm';
 import ChatBody from '../components/ChatBody';
+import routes from '../routes';
+import { addChannels, setCurrentChannelId } from '../store/channelsSlice';
+import { addMessages } from '../store/messagesSlice';
 
 const Chat = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!auth.userIsLogged()) {
       navigate('/login');
+      return;
     };
+
+    const getData = async () => {
+      const { data } = await axios.get(routes.data, { headers: auth.getAuthHeader() });
+
+      batch(() => {
+        dispatch(addChannels(data.channels));
+        dispatch(setCurrentChannelId(data.currentChannelId));
+        dispatch(addMessages(data.messages));
+      });
+    };
+
+    getData();
   });
 
   return (
@@ -32,7 +51,7 @@ const Chat = () => {
               </Col>
             </Row>
 
-            <Row className="overflow-auto my-3">
+            <Row className="overflow-auto my-3 flex-grow-1">
               <Col id="messages-box" className="chat-messages px-4">
                 <ChatBody />
               </Col>
