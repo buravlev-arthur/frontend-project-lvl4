@@ -2,6 +2,6 @@
   "extends": "react-app",
   "plugins": ["react-hooks"],
   "rules": {
-    "react-hooks/exhaustive-deps": "none"
+    "react-hooks/exhaustive-deps": 0
   }
 }

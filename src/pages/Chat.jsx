@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 import { useDispatch, batch } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import ChatMessageForm from '../components/ChatMessageForm';
 import ChatBody from '../components/ChatBody';
 import routes from '../routes';
 import { addChannels, setCurrentChannelId } from '../store/channelsSlice';
-import { addMessages, addMessage } from '../store/messagesSlice';
+import { addMessages } from '../store/messagesSlice';
 
 const Chat = () => {
   const auth = useContext(AuthContext);
