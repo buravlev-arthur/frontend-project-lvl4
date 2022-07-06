@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
@@ -18,7 +18,6 @@ const Login = () => {
       .min(2, 'Логин должен содержать не менее 2 символов')
       .required('Обязательное поле'),
     password: yup.string()
-      .min(5, 'Пароль должен содержать не менее 5 символов')
       .required('Обязательное поле'),
   });
 
@@ -31,7 +30,7 @@ const Login = () => {
   const submit = (formData) => {
     axios.post(routes.login, formData)
       .then(({ data: { token } }) => {
-        auth.logIn(token);
+        auth.logIn(token, formData.username);
         navigate('/');
       })
       .catch(() => setAuthError(true));
@@ -49,7 +48,7 @@ const Login = () => {
           {({ getFieldProps, handleSubmit }) => (
             <>
               <Form onSubmit={handleSubmit}>
-                <Input id="username" authError={String(authError)} type="username" label="Логин" {...getFieldProps('username')} />
+                <Input id="userName" authError={String(authError)} type="username" label="Логин" {...getFieldProps('username')} />
                 <Input id="password" authError={String(authError)} type="password" label="Пароль" {...getFieldProps('password')} />
                 <Form.Group className="my-4 d-grid">
                   <Button type="submit" variant="outline-primary">Отправить</Button>

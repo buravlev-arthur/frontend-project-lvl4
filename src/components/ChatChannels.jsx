@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Nav, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { PlusCircle } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';

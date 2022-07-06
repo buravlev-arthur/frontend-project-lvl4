@@ -1,22 +1,29 @@
+import { useContext } from 'react';
+import { useSelector } from 'react-redux';
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { ArrowRightCircleFill } from 'react-bootstrap-icons';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import SocketContext from '../contexts/SocketContext';
+import AuthContext from '../contexts/AuthContext';
 
 const ChatMessageForm = () => {
+  const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
+  const chat = useContext(SocketContext);
+  const auth = useContext(AuthContext);
+
   const schema = yup.object({
     message: yup.string().required(),
   });
-
-  const submit = (formData) => {
-    console.log(formData);
-  };
 
   return (
     <Formik
     initialValues={{ message: '' }}
     validationSchema={schema}
-    onSubmit={submit}
+    onSubmit={({ message }, { resetForm }) => {
+      chat.socket.emit('newMessage', { body: message, channelId: currentChannelId, username: auth.getUsername() });
+      resetForm();
+    }}
     >
       {({ getFieldProps, handleSubmit, errors }) => (
         <Form className="border rounded" onSubmit={handleSubmit}>
