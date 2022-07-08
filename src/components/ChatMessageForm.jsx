@@ -21,11 +21,11 @@ const ChatMessageForm = () => {
     initialValues={{ message: '' }}
     validationSchema={schema}
     onSubmit={({ message }, { resetForm }) => {
-      chat.socket.emit('newMessage', { body: message, channelId: currentChannelId, username: auth.getUsername() });
-      resetForm();
+      const data = { body: message, channelId: currentChannelId, username: auth.getUsername() };
+      chat.socket.emit('newMessage', data, resetForm);
     }}
     >
-      {({ getFieldProps, handleSubmit, errors }) => (
+      {({ getFieldProps, handleSubmit, isSubmitting }) => (
         <Form className="border rounded" onSubmit={handleSubmit}>
           <InputGroup>
             <FormControl
@@ -38,7 +38,7 @@ const ChatMessageForm = () => {
               type="submit"
               variant="link"
               className="mb-1 text-dark"
-              disabled={!getFieldProps('message').value.length ? true : false}
+              disabled={!getFieldProps('message').value.length || isSubmitting}
             >
               <ArrowRightCircleFill size={20} />
             </Button>

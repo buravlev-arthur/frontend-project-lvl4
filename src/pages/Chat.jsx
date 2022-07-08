@@ -43,7 +43,7 @@ const Chat = () => {
       <Row className="justify-content-lg-center h-75">
         <Col lg={8} className="rounded shadow h-100">
           <Row className="rounded h-100">
-            <Col lg={2} className="bg-light rounded-start border-end">
+            <Col lg={2} className="bg-light rounded-start border-end h-100 overflow-auto">
               <ChatChannels />
             </Col>
 
