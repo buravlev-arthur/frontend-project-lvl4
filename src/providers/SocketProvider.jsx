@@ -1,15 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
 import SocketContext from '../contexts/SocketContext';
 import AuthContext from '../contexts/AuthContext';
 import { addMessage } from '../store/messagesSlice';
-import { addChannel } from '../store/channelsSlice';
+import { addChannel, removeChannel, setCurrentChannelId } from '../store/channelsSlice';
 
 const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const auth = useContext(AuthContext);
   const dispatch = useDispatch();
+  const сurrentChannelId = useSelector(({ channels }) => channels.currentChannelId);
 
   useEffect(() => {
     if (!auth.userIsLogged()) {
@@ -30,6 +31,22 @@ const SocketProvider = ({ children }) => {
       dispatch(addChannel(payload));
     });
   }, []);
+
+  useEffect(() => {
+    if (socket === null) {
+      return;
+    }
+
+    socket.off('removeChannel');
+
+    socket.on('removeChannel', ({ id }) => {
+      dispatch(removeChannel(id));
+
+      if (сurrentChannelId === id) {
+        dispatch(setCurrentChannelId(1));
+      }
+    });
+  }, [socket, сurrentChannelId]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

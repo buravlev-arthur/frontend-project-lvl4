@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import SocketContext from '../contexts/SocketContext';
 import { selectors, setCurrentChannelId } from '../store/channelsSlice';
 
-const ModalWindow = ({ show, close, type, ...props }) => {
+const ModalWindow = ({ show, close, type, channelId }) => {
   const dispatch = useDispatch();
   const chat = useContext(SocketContext);
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
@@ -24,11 +24,30 @@ const ModalWindow = ({ show, close, type, ...props }) => {
     close();
   };
 
+  const remove = () => {
+    chat.socket.emit('removeChannel', { id: channelId });
+    close();
+  };
+
   const config = {
     add: {
       header: 'Добавить канал',
       submit: 'Добавить',
-      action: add,
+      submitType: 'dark',
+      props: {
+        initialValues: { name: '' },
+        validationSchema: schema,
+        onSubmit: add,
+      },
+    },
+    remove: {
+      header: 'Удалить канал',
+      submit: 'Удалить',
+      submitType: 'danger',
+      props: {
+        initialValues: {},
+        onSubmit: remove,
+      },
     },
   };
 
@@ -41,20 +60,20 @@ const ModalWindow = ({ show, close, type, ...props }) => {
       </Modal.Header>
       
       <Modal.Body>
-        <Formik
-          initialValues={{ name: '' }}
-          validationSchema={schema}
-          onSubmit={set.action}
-        >
+        <Formik {...set.props}>
           {({ getFieldProps, handleSubmit, errors }) => (
             <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="name">
-                <Form.Control type="text" autoFocus {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
-                <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
-              </Form.Group>
+              {type === 'remove' ? (
+                <p className="lead">Будет удален канал. Вы уверены?</p>
+              ) : (
+                <Form.Group className="mb-3" controlId="name">
+                  <Form.Control type="text" autoFocus {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
+                  <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                </Form.Group>
+              )}
 
               <div className="d-flex justify-content-end">
-                <Button variant="dark" type="submit" className="me-2">{set.submit}</Button>
+                <Button variant={set.submitType} type="submit" className="me-2">{set.submit}</Button>
                 <Button variant="secondary" type="button" onClick={close}>Отмена</Button>
               </div>
             </Form>

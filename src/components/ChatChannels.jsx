@@ -53,7 +53,7 @@ const ChatChannels = () => {
                 </Button>
                 <Dropdown.Toggle split variant={buttonStyle} className="flex-grow-0 text-end" />
                 <Dropdown.Menu>
-                  <Dropdown.Item>Удалить</Dropdown.Item>
+                  <Dropdown.Item onClick={openModal('remove', id)}>Удалить</Dropdown.Item>
                   <Dropdown.Item>Переименовать</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
