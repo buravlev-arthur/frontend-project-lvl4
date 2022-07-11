@@ -4,12 +4,11 @@ import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { ArrowRightCircleFill } from 'react-bootstrap-icons';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import SocketContext from '../contexts/SocketContext';
 import AuthContext from '../contexts/AuthContext';
+import { sendMessage } from '../socket';
 
 const ChatMessageForm = () => {
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
-  const chat = useContext(SocketContext);
   const auth = useContext(AuthContext);
 
   const schema = yup.object({
@@ -22,7 +21,7 @@ const ChatMessageForm = () => {
     validationSchema={schema}
     onSubmit={({ message }, { resetForm }) => {
       const data = { body: message, channelId: currentChannelId, username: auth.getUsername() };
-      chat.socket.emit('newMessage', data, resetForm);
+      sendMessage(data, resetForm);
     }}
     >
       {({ getFieldProps, handleSubmit, isSubmitting }) => (
