@@ -14,13 +14,15 @@ const ChatChannels = () => {
     type: 'add',
     show: false,
     channelId: null,
+    channelName: '',
   });
 
-  const openModal = (type, channelId = null) => () => {
+  const openModal = (type, channelId = null, channelName = '') => () => {
     updateModalSettings((draft) => {
       draft.type = type;
       draft.show = true;
       draft.channelId = channelId;
+      draft.channelName = channelName;
     });
   };
 
@@ -46,21 +48,21 @@ const ChatChannels = () => {
           const buttonStyle = id === currentChannelId ? 'secondary' : 'light';
 
           return removable ? (
-            <Nav.Item key={id}>
+            <Nav.Item key={id} className="w-100">
               <Dropdown as={ButtonGroup} className="w-100">
-                <Button variant={buttonStyle} className="text-start" onClick={select(id)}>
+                <Button variant={buttonStyle} className="text-start w-100 text-truncate" onClick={select(id)}>
                   <span>#</span> {name}
                 </Button>
                 <Dropdown.Toggle split variant={buttonStyle} className="flex-grow-0 text-end" />
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={openModal('remove', id)}>Удалить</Dropdown.Item>
-                  <Dropdown.Item>Переименовать</Dropdown.Item>
+                  <Dropdown.Item onClick={openModal('remove', id, name)}>Удалить</Dropdown.Item>
+                  <Dropdown.Item onClick={openModal('rename', id, name)}>Переименовать</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Item>
           ) : (
             <Nav.Item key={id}>
-              <Button variant={buttonStyle} className="w-100 text-start" onClick={select(id)}>
+              <Button variant={buttonStyle} className="w-100 text-start text-truncate" onClick={select(id)}>
                 <span>#</span> {name}
               </Button>
             </Nav.Item>         

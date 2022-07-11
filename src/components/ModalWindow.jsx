@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
@@ -6,10 +6,18 @@ import * as yup from 'yup';
 import SocketContext from '../contexts/SocketContext';
 import { selectors, setCurrentChannelId } from '../store/channelsSlice';
 
-const ModalWindow = ({ show, close, type, channelId }) => {
+const ModalWindow = ({ show, close, type, channelId, channelName }) => {
   const dispatch = useDispatch();
+  const inputEl = useRef();
   const chat = useContext(SocketContext);
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
+
+  useEffect(() => {
+    if (show && type !== 'remove') {
+      inputEl.current.focus();
+      inputEl.current.select();
+    }
+  }, [show]);
 
   const schema = yup.object({
     name: yup.string()
@@ -26,6 +34,11 @@ const ModalWindow = ({ show, close, type, channelId }) => {
 
   const remove = () => {
     chat.socket.emit('removeChannel', { id: channelId });
+    close();
+  };
+
+  const rename = ({ name }) => {
+    chat.socket.emit('renameChannel', { id: channelId, name });
     close();
   };
 
@@ -49,6 +62,17 @@ const ModalWindow = ({ show, close, type, channelId }) => {
         onSubmit: remove,
       },
     },
+    rename: {
+      header: 'Переименовать канал',
+      submit: 'Переименовать',
+      submitType: 'dark',
+      props: {
+        enableReinitialize: true,
+        initialValues: { name: channelName },
+        validationSchema: schema,
+        onSubmit: rename,
+      },
+    },
   };
 
   const set = config[type];
@@ -64,10 +88,10 @@ const ModalWindow = ({ show, close, type, channelId }) => {
           {({ getFieldProps, handleSubmit, errors }) => (
             <Form onSubmit={handleSubmit}>
               {type === 'remove' ? (
-                <p className="lead">Будет удален канал. Вы уверены?</p>
+                <p className="lead">Канал "{channelName}" будет удалён. Вы уверены?</p>
               ) : (
-                <Form.Group className="mb-3" controlId="name">
-                  <Form.Control type="text" autoFocus {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
+                <Form.Group className="mb-3 modal-input-block" controlId="name">
+                  <Form.Control ref={inputEl} type="text" {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
                   <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                 </Form.Group>
               )}

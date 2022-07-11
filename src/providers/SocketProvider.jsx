@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 import SocketContext from '../contexts/SocketContext';
 import AuthContext from '../contexts/AuthContext';
 import { addMessage } from '../store/messagesSlice';
-import { addChannel, removeChannel, setCurrentChannelId } from '../store/channelsSlice';
+import { addChannel, removeChannel, renameChannel, setCurrentChannelId } from '../store/channelsSlice';
 
 const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
@@ -30,6 +30,10 @@ const SocketProvider = ({ children }) => {
     chatServer.on('newChannel', (payload) => {
       dispatch(addChannel(payload));
     });
+
+    chatServer.on('renameChannel', ({ id, name }) => {
+      dispatch(renameChannel({ id, changes: { name } }));
+    });
   }, []);
 
   useEffect(() => {
@@ -46,7 +50,7 @@ const SocketProvider = ({ children }) => {
         dispatch(setCurrentChannelId(1));
       }
     });
-  }, [socket, сurrentChannelId]);
+  }, [сurrentChannelId]);
 
   return (
     <SocketContext.Provider value={{ socket }}>
