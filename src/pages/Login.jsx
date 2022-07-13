@@ -37,8 +37,8 @@ const Login = () => {
   };
 
   return (
-    <Row>
-      <Col xs={10} md={6} lg={3} className="border p-5 position-absolute top-50 start-50 translate-middle shadow-sm bg-white">
+    <Row className="d-flex justify-content-center">
+      <Col xs={11} md={6} lg={3} className="rounded p-5 mt-5 shadow bg-white">
         <h1 className="display-6 mb-3">Войти</h1>
         <Formik
           initialValues={{ username: '', password: '' }}
@@ -46,18 +46,38 @@ const Login = () => {
           onSubmit={submit}
         >
           {({ getFieldProps, handleSubmit }) => (
-            <>
-              <Form onSubmit={handleSubmit}>
-                <Input id="userName" authError={String(authError)} type="username" label="Логин" {...getFieldProps('username')} />
-                <Input id="password" authError={String(authError)} type="password" label="Пароль" {...getFieldProps('password')} />
-                <Form.Group className="my-4 d-grid">
-                  <Button type="submit" variant="outline-primary">Отправить</Button>
-                </Form.Group>
-                {authError ? <Form.Text className="text-danger">Неверные логин или пароль</Form.Text> : null}
-              </Form>
-            </>
+            <Form onSubmit={handleSubmit}>
+              <Input
+                id="userName"
+                authError={String(authError)}
+                type="text"
+                label="Логин"
+                {...getFieldProps('username')}
+              />
+
+              <Input
+                id="password"
+                authError={String(authError)}
+                type="password"
+                label="Пароль"
+                {...getFieldProps('password')}
+              />
+
+              <div className="my-4 d-grid">
+                <Button type="submit" variant="outline-primary">Отправить</Button>
+              </div>
+
+              {authError ? <Form.Text className="text-danger">Неверные логин или пароль</Form.Text> : null}
+            </Form>
           )}
         </Formik>
+
+        <hr />
+
+        <div className="text-center">
+          <span>Нет аккаунта? </span>
+          <a href={routes.pages.signup}>Регистрация</a>
+        </div>
       </Col>
     </Row>
   );
