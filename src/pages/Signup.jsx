@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
@@ -12,25 +13,30 @@ const SignUp = () => {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  yup.setLocale({
+    string: {
+      min: ({ min }) => t('formErrors.min', { count: min }),
+      max: t('formErrors.max', { count: 20 }),
+    },
+    mixed: {
+      required: t('formErrors.required'),
+      oneOf: t('formErrors.confirmPassword'),
+    }
+  });
 
   const schema = yup.object({
-    username: yup.string()
-      .min(3, 'Должно содержать не менее 3 символов')
-      .max(20, 'Должно содержать не более 20 символов')
-      .required('Обязательное поле'),
-    password: yup.string()
-      .min(6, 'Должен содержать не менее 6 символов')
-      .required('Обязательное поле'),
-    confirmPassword: yup.string()
-      .oneOf([yup.ref('password')], 'Пароль и подтверждение должны совпадать')
-      .required('Обязательное поле'),
+    username: yup.string().min(3).max(20).required(),
+    password: yup.string().min(6).required(),
+    confirmPassword: yup.string().oneOf([yup.ref('password')]).required(),
   });
 
   const submit = ({ username, password }) => {
     axios.post(routes.signup, { username, password })
       .then(({ data: { token } }) => {
         auth.logIn(token, username);
-        navigate('/');
+        navigate(routes.pages.chat);
       })
       .catch(() => setAuthError(true));
   };
@@ -38,7 +44,7 @@ const SignUp = () => {
   return (
     <Row className="d-flex justify-content-center">
       <Col xs={11} md={6} lg={3} className="rounded p-5 mt-5 shadow bg-white">
-        <h1 className="display-6 mb-3">Регистрация</h1>
+        <h1 className="display-6 mb-3">{t('signUp.header')}</h1>
         <Formik
           initialValues={{ username: '', password: '', confirmPassword: '' }}
           validationSchema={schema}
@@ -50,7 +56,7 @@ const SignUp = () => {
                 id="username"
                 authError={String(authError)}
                 type="text"
-                label="Имя пользователя"
+                label={t('signUp.username')}
                 {...getFieldProps('username')}
               />
 
@@ -58,7 +64,7 @@ const SignUp = () => {
                 id="password"
                 authError={false}
                 type="password"
-                label="Пароль"
+                label={t('signUp.password')}
                 {...getFieldProps('password')}
               />
 
@@ -66,14 +72,14 @@ const SignUp = () => {
                 id="confirmPassword"
                 authError={false}
                 type="password"
-                label="Подтвердите пароль"
+                label={t('signUp.confirmPassword')}
                 {...getFieldProps('confirmPassword')}
               />
               
-              {authError ? <Form.Text className="text-danger">Такой пользователь уже существует</Form.Text> : null}
+              {authError ? <Form.Text className="text-danger">{t('formErrors.userExists')}</Form.Text> : null}
 
               <div className="my-4 d-grid">
-                <Button type="submit" variant="outline-primary">Зарегестрироваться</Button>
+                <Button type="submit" variant="outline-primary">{t('signUp.submitButton')}</Button>
               </div>
             </Form>
           )}

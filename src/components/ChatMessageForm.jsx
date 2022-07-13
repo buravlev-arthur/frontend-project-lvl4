@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { ArrowRightCircleFill } from 'react-bootstrap-icons';
@@ -10,6 +11,7 @@ import { sendMessage } from '../socket';
 const ChatMessageForm = () => {
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const auth = useContext(AuthContext);
+  const { t } = useTranslation();
 
   const schema = yup.object({
     message: yup.string().required(),
@@ -29,8 +31,8 @@ const ChatMessageForm = () => {
           <InputGroup>
             <FormControl
               className="border-0"
-              placeholder="Введите сообщение..."
-              aria-label="Новое сообщение"
+              placeholder={t('chat.form.placeholder')}
+              aria-label={t('chat.form.ariaLabel')}
               {...getFieldProps('message')}
             />
             <Button

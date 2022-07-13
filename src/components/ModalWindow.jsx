@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
@@ -9,6 +10,7 @@ import { addNewChannel, deleteChannel, setChannelName } from '../socket';
 const ModalWindow = ({ show, close, type, channelId, channelName }) => {
   const inputEl = useRef();
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (show && type !== 'remove') {
@@ -17,16 +19,21 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
     }
   }, [show]);
 
+  yup.setLocale({
+    mixed: {
+      required: t('formErrors.required'),
+      notOneOf: t('formErrors.channelExists'),
+    },
+  });
+
   const schema = yup.object({
-    name: yup.string()
-      .required('Обязательное поле')
-      .notOneOf(channels, 'Такой канал уже существует'),
+    name: yup.string().required().notOneOf(channels),
   });
 
   const config = {
     add: {
-      header: 'Добавить канал',
-      submit: 'Добавить',
+      header: t('chat.modalWindow.add.header'),
+      submit: t('chat.modalWindow.add.submit'),
       submitType: 'dark',
       props: {
         initialValues: { name: '' },
@@ -35,8 +42,8 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
       },
     },
     remove: {
-      header: 'Удалить канал',
-      submit: 'Удалить',
+      header: t('chat.modalWindow.remove.header'),
+      submit: t('chat.modalWindow.remove.submit'),
       submitType: 'danger',
       props: {
         initialValues: {},
@@ -44,8 +51,8 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
       },
     },
     rename: {
-      header: 'Переименовать канал 2',
-      submit: 'Переименовать',
+      header: t('chat.modalWindow.rename.header'),
+      submit: t('chat.modalWindow.rename.submit'),
       submitType: 'dark',
       props: {
         enableReinitialize: true,
@@ -69,7 +76,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
           {({ getFieldProps, handleSubmit, errors, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               {type === 'remove' ? (
-                <p className="lead">Канал "{channelName}" будет удалён. Вы уверены?</p>
+                <p className="lead">{t('chat.modalWindow.remove.warning', { name: channelName })}</p>
               ) : (
                 <Form.Group className="mb-3 modal-input-block" controlId="name">
                   <Form.Control ref={inputEl} type="text" {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
@@ -79,7 +86,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
 
               <div className="d-flex justify-content-end">
                 <Button variant={set.submitType} type="submit" className="me-2" disabled={isSubmitting}>{set.submit}</Button>
-                <Button variant="secondary" type="button" onClick={close}>Отмена</Button>
+                <Button variant="secondary" type="button" onClick={close}>{t('chat.modalWindow.cancelButton')}</Button>
               </div>
             </Form>
           )}

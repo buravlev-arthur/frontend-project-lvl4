@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
@@ -12,18 +13,25 @@ const Login = () => {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  yup.setLocale({
+    string: {
+      min: t('formErrors.min', { count: 3 }),
+    },
+    mixed: {
+      required: t('formErrors.required'),
+    }
+  });
   
   const schema = yup.object({
-    username: yup.string()
-      .min(2, 'Логин должен содержать не менее 2 символов')
-      .required('Обязательное поле'),
-    password: yup.string()
-      .required('Обязательное поле'),
+    username: yup.string().min(3).required(),
+    password: yup.string().required(),
   });
 
   useEffect(() => {
     if (auth.userIsLogged()) {
-      navigate('/');
+      navigate(routes.pages.chat);
     }
   });
 
@@ -39,7 +47,7 @@ const Login = () => {
   return (
     <Row className="d-flex justify-content-center">
       <Col xs={11} md={6} lg={3} className="rounded p-5 mt-5 shadow bg-white">
-        <h1 className="display-6 mb-3">Войти</h1>
+        <h1 className="display-6 mb-3">{t('login.header')}</h1>
         <Formik
           initialValues={{ username: '', password: '' }}
           validationSchema={schema}
@@ -51,7 +59,7 @@ const Login = () => {
                 id="userName"
                 authError={String(authError)}
                 type="text"
-                label="Логин"
+                label={t('login.username')}
                 {...getFieldProps('username')}
               />
 
@@ -59,15 +67,15 @@ const Login = () => {
                 id="password"
                 authError={String(authError)}
                 type="password"
-                label="Пароль"
+                label={t('login.password')}
                 {...getFieldProps('password')}
               />
 
               <div className="my-4 d-grid">
-                <Button type="submit" variant="outline-primary">Отправить</Button>
+                <Button type="submit" variant="outline-primary">{t('login.submitButton')}</Button>
               </div>
 
-              {authError ? <Form.Text className="text-danger">Неверные логин или пароль</Form.Text> : null}
+              {authError ? <Form.Text className="text-danger">{t('formErrors.wrongLoginAndPassword')}</Form.Text> : null}
             </Form>
           )}
         </Formik>
@@ -75,8 +83,9 @@ const Login = () => {
         <hr />
 
         <div className="text-center">
-          <span>Нет аккаунта? </span>
-          <a href={routes.pages.signup}>Регистрация</a>
+          <span>{t('login.auth.text')}</span>
+          {' '}
+          <a href={routes.pages.signup}>{t('login.auth.link')}</a>
         </div>
       </Col>
     </Row>

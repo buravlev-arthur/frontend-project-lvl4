@@ -1,21 +1,24 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import AuthContext from '../contexts/AuthContext';
+import routes from '../routes';
 
 const NotFound = () => {
   const auth = useContext(AuthContext);
+  const { t } = useTranslation();
 
   return (
     <Row>
       <Col xs={10} md={8} lg={6} className="position-absolute top-50 start-50 translate-middle border p-5 bg-white shadow-sm">
         <h1 className="display-1 text-center">404</h1>
-        <p className="lead text-center">Такой страницы нет, или нам здесь просто не рады...</p>
+        <p className="lead text-center">{t('notFound.text')}</p>
         <nav className="text-center">
           {auth.userIsLogged() ? (
-            <Link to="/">Вернуться в чат</Link>
+            <Link to={routes.pages.chat}>{t('notFound.chatLink')}</Link>
           ) : (
-            <Link to="login">Войти</Link>
+            <Link to={routes.pages.login}>{t('notFound.loginLink')}</Link>
           )}
         </nav>
       </Col>

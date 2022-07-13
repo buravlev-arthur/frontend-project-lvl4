@@ -1,0 +1,82 @@
+{
+  "translation": {
+    "header": {
+      "exitButton": "Выйти"
+    },
+
+    "login": {
+      "header": "Войти",
+      "username": "Логин",
+      "password": "Пароль",
+      "submitButton": "Отправить",
+      "auth": {
+        "text": "Нет аккаунта?",
+        "link": "Регистрация"
+      }
+    },
+
+    "notFound": {
+      "text": "Такой страницы нет, или нам здесь просто не рады...",
+      "chatLink": "Вернуться в чат",
+      "loginLink": "Войти"
+    },
+
+    "signUp": {
+      "header": "Регистрация",
+      "username": "Имя пользователя",
+      "password": "Пароль",
+      "confirmPassword": "Подтвердите пароль",
+      "submitButton": "Зарегестрироваться"
+    },
+
+    "chat": {
+      "noMessages": "В этом канале ещё нет сообщений",
+
+      "form": {
+        "placeholder": "Введите сообщение...",
+        "ariaLabel": "Новое сообщение"
+      },
+
+      "channels": {
+        "header": "Каналы",
+        "removeButton": "Удалить",
+        "renameButton": "Переименовать"
+      },
+
+      "header": {
+        "count_one": "{{count}} сообщение",
+        "count_few": "{{count}} сообщения",
+        "count_many": "{{count}} сообщений"
+      },
+
+      "modalWindow": {
+        "add": {
+          "header": "Добавить канал",
+          "submit": "Добавить"
+        },
+
+        "remove": {
+          "header": "Удалить канал",
+          "submit": "Удалить",
+          "warning": "Канал \"{{name}}\" будет удалён. Вы уверены?"
+        },
+
+        "rename": {
+          "header": "Переименовать канал",
+          "submit": "Переименовать"
+        },
+
+        "cancelButton": "Отмена"
+      }
+    },
+
+    "formErrors": {
+      "min": "Должен содержать не менее {{count}} символов",
+      "required": "Обязательное поле",
+      "confirmPassword": "Пароль и подтверждение должны совпадать",
+      "wrongLoginAndPassword": "Неверные логин или пароль",
+      "userExists": "Такой пользователь уже существует",
+      "channelExists": "Такой канал уже существует"
+    } 
+  }
+}

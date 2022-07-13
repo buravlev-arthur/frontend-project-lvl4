@@ -1,4 +1,5 @@
 import { useImmer } from 'use-immer';
+import { useTranslation } from 'react-i18next';
 import { Button, Nav, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { PlusCircle } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,6 +10,7 @@ const ChatChannels = () => {
   const channels = useSelector(selectors.selectAll);
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [modalSettings, updateModalSettings] = useImmer({
     type: 'add',
@@ -35,7 +37,7 @@ const ChatChannels = () => {
   return (
     <>
       <div className="d-flex justify-content-between mb-2 mt-5">
-        <div className="align-self-center">Каналы</div>
+        <div className="align-self-center">{t('chat.channels.header')}</div>
         <div className="align-self-center">
           <Button variant="link text-dark p-0" onClick={openModal('add')}>
             <PlusCircle />
@@ -55,8 +57,8 @@ const ChatChannels = () => {
                 </Button>
                 <Dropdown.Toggle split variant={buttonStyle} className="flex-grow-0 text-end" />
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={openModal('remove', id, name)}>Удалить</Dropdown.Item>
-                  <Dropdown.Item onClick={openModal('rename', id, name)}>Переименовать</Dropdown.Item>
+                  <Dropdown.Item onClick={openModal('remove', id, name)}>{t('chat.channels.removeButton')}</Dropdown.Item>
+                  <Dropdown.Item onClick={openModal('rename', id, name)}>{t('chat.channels.renameButton')}</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Item>
