@@ -77,6 +77,14 @@
       "wrongLoginAndPassword": "Неверные логин или пароль",
       "userExists": "Такой пользователь уже существует",
       "channelExists": "Такой канал уже существует"
-    } 
+    },
+
+    "notification": {
+      "addChannel": "Канал успешно добавлен",
+      "removeChannel": "Канал успешно удалён",
+      "renameChannel": "Канал успешно переименован",
+      "loadingError": "Ошибка загрузки данных",
+      "sendDataError": "Ошибка отправки данных"
+    }
   }
 }

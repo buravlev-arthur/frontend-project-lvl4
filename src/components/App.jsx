@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import AuthProvider from '../providers/AuthProvider';
 import Header from './Header';
 import Login from '../pages/Login';
@@ -22,6 +24,7 @@ const App = () => {
             <Route path={signup} element={<SignUp />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <ToastContainer position="bottom-right" />
         </BrowserRouter>
       </Container>
     </AuthProvider>

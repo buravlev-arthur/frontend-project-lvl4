@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { toast } from "react-toastify";
 import { selectors } from '../store/channelsSlice';
 import { addNewChannel, deleteChannel, setChannelName } from '../socket';
 
@@ -11,6 +12,11 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
   const inputEl = useRef();
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
   const { t } = useTranslation();
+  
+  const callback = (action) => () => {
+    toast.success(t(`notification.${action}Channel`));
+    close();
+  };
 
   useEffect(() => {
     if (show && type !== 'remove') {
@@ -38,7 +44,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
       props: {
         initialValues: { name: '' },
         validationSchema: schema,
-        onSubmit: ({ name }) => addNewChannel(name, close),
+        onSubmit: ({ name }) => addNewChannel(name, callback('add')),
       },
     },
     remove: {
@@ -47,7 +53,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
       submitType: 'danger',
       props: {
         initialValues: {},
-        onSubmit: () => deleteChannel(channelId, close),
+        onSubmit: () => deleteChannel(channelId, callback('remove')),
       },
     },
     rename: {
@@ -58,7 +64,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
         enableReinitialize: true,
         initialValues: { name: channelName },
         validationSchema: schema,
-        onSubmit: ({ name }) => setChannelName({ id: channelId, name }, close),
+        onSubmit: ({ name }) => setChannelName({ id: channelId, name }, callback('rename')),
       },
     },
   };

@@ -3,6 +3,8 @@ import { useDispatch, batch } from 'react-redux';
 import { Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import AuthContext from '../contexts/AuthContext';
 import ChatChannels from '../components/ChatChannels';
 import ChatHeader from '../components/ChatHeader';
@@ -16,6 +18,7 @@ const Chat = () => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!auth.userIsLogged()) {
@@ -24,17 +27,15 @@ const Chat = () => {
       return;
     };
 
-    const getData = async () => {
-      const { data } = await axios.get(routes.data, { headers: auth.getAuthHeader() });
-
-      batch(() => {
-        dispatch(addChannels(data.channels));
-        dispatch(setCurrentChannelId(data.currentChannelId));
-        dispatch(addMessages(data.messages));
-      });
-    };
-
-    getData();
+    axios.get(routes.data, { headers: auth.getAuthHeader() })
+      .then(({ data }) => {
+        batch(() => {
+          dispatch(addChannels(data.channels));
+          dispatch(setCurrentChannelId(data.currentChannelId));
+          dispatch(addMessages(data.messages));
+        });
+      })
+      .catch(() => toast.error(t('notification.loadingError')));
   }, []);
 
   return (

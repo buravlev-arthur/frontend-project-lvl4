@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import AuthContext from "../contexts/AuthContext";
 import Input from '../formElements/Input';
 import routes from '../routes';
@@ -32,13 +33,20 @@ const SignUp = () => {
     confirmPassword: yup.string().oneOf([yup.ref('password')]).required(),
   });
 
-  const submit = ({ username, password }) => {
+  const submit = ({ username, password }, setSubmitting) => {
     axios.post(routes.signup, { username, password })
       .then(({ data: { token } }) => {
         auth.logIn(token, username);
         navigate(routes.pages.chat);
       })
-      .catch(() => setAuthError(true));
+      .catch(({ response: { status } }) => {
+        if (status === 500) {
+          toast.error(t('notification.sendDataError'));
+          return;
+        };
+        setAuthError(true);
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -48,9 +56,9 @@ const SignUp = () => {
         <Formik
           initialValues={{ username: '', password: '', confirmPassword: '' }}
           validationSchema={schema}
-          onSubmit={submit}
+          onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
         >
-          {({ handleSubmit, getFieldProps }) => (
+          {({ handleSubmit, getFieldProps, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <Input
                 id="username"
@@ -79,7 +87,13 @@ const SignUp = () => {
               {authError ? <Form.Text className="text-danger">{t('formErrors.userExists')}</Form.Text> : null}
 
               <div className="my-4 d-grid">
-                <Button type="submit" variant="outline-primary">{t('signUp.submitButton')}</Button>
+                <Button
+                  type="submit"
+                  variant="outline-primary"
+                  disabled={isSubmitting}
+                >
+                  {t('signUp.submitButton')}
+                </Button>
               </div>
             </Form>
           )}

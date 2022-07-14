@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import routes from '../routes';
 import Input from '../formElements/Input';
 import AuthContext from '../contexts/AuthContext';
@@ -17,7 +18,7 @@ const Login = () => {
 
   yup.setLocale({
     string: {
-      min: t('formErrors.min', { count: 3 }),
+      min: ({ min }) => t('formErrors.min', { count: min }),
     },
     mixed: {
       required: t('formErrors.required'),
@@ -35,13 +36,20 @@ const Login = () => {
     }
   });
 
-  const submit = (formData) => {
+  const submit = (formData, setSubmitting) => {
     axios.post(routes.login, formData)
       .then(({ data: { token } }) => {
         auth.logIn(token, formData.username);
-        navigate('/');
+        navigate(routes.pages.chat);
       })
-      .catch(() => setAuthError(true));
+      .catch(({ response: { status } }) => {
+        if (status === 500) {
+          toast.error(t('notification.sendDataError'));
+          return;
+        };
+        setAuthError(true);
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -51,9 +59,9 @@ const Login = () => {
         <Formik
           initialValues={{ username: '', password: '' }}
           validationSchema={schema}
-          onSubmit={submit}
+          onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
         >
-          {({ getFieldProps, handleSubmit }) => (
+          {({ getFieldProps, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <Input
                 id="userName"
@@ -72,7 +80,13 @@ const Login = () => {
               />
 
               <div className="my-4 d-grid">
-                <Button type="submit" variant="outline-primary">{t('login.submitButton')}</Button>
+                <Button
+                  type="submit"
+                  variant="outline-primary"
+                  disabled={isSubmitting}
+                >
+                  {t('login.submitButton')}
+                </Button>
               </div>
 
               {authError ? <Form.Text className="text-danger">{t('formErrors.wrongLoginAndPassword')}</Form.Text> : null}

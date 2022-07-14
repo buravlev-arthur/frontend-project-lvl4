@@ -26,7 +26,7 @@ const ChatMessageForm = () => {
       sendMessage(data, resetForm);
     }}
     >
-      {({ getFieldProps, handleSubmit, isSubmitting }) => (
+      {({ getFieldProps, handleSubmit, isSubmitting, dirty }) => (
         <Form className="border rounded" onSubmit={handleSubmit}>
           <InputGroup>
             <FormControl
@@ -39,7 +39,7 @@ const ChatMessageForm = () => {
               type="submit"
               variant="link"
               className="mb-1 text-dark"
-              disabled={!getFieldProps('message').value.length || isSubmitting}
+              disabled={!dirty || isSubmitting}
             >
               <ArrowRightCircleFill size={20} />
             </Button>
