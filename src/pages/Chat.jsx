@@ -1,10 +1,11 @@
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { useDispatch, batch } from 'react-redux';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import AuthContext from '../contexts/AuthContext';
 import ChatChannels from '../components/ChatChannels';
 import ChatHeader from '../components/ChatHeader';
@@ -15,9 +16,11 @@ import { addChannels, setCurrentChannelId } from '../store/channelsSlice';
 import { addMessages } from '../store/messagesSlice';
 
 const Chat = () => {
+  const [loaded, setLoaded] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -34,39 +37,50 @@ const Chat = () => {
           dispatch(setCurrentChannelId(data.currentChannelId));
           dispatch(addMessages(data.messages));
         });
+
+        setLoaded(true);
       })
-      .catch(() => toast.error(t('notification.loadingError')));
+      .catch((error) => {
+        toast.error(t('notification.loadingError'));
+        rollbar.error(t('notification.loadingError'), error);
+      });
   }, []);
 
   return (
     <Row className="justify-content-lg-center h-75">
-      <Col lg={8} className="rounded shadow h-100">
-        <Row className="rounded h-100">
-          <Col lg={2} className="bg-light rounded-start border-end h-100 overflow-auto">
-            <ChatChannels />
-          </Col>
+      {loaded ? (
+        <Col lg={8} className="rounded shadow h-100">
+          <Row className="rounded h-100">
+            <Col lg={2} className="bg-light rounded-start border-end h-100 overflow-auto">
+              <ChatChannels />
+            </Col>
 
-          <Col lg={10} className="d-flex flex-column h-100 bg-white rounded-end">
-            <Row className="rounded-top">
-              <Col className="shadow-sm py-3 bg-light rounded-top">
-                <ChatHeader />
-              </Col>
-            </Row>
+            <Col lg={10} className="d-flex flex-column h-100 bg-white rounded-end">
+              <Row className="rounded-top">
+                <Col className="shadow-sm py-3 bg-light rounded-top">
+                  <ChatHeader />
+                </Col>
+              </Row>
 
-            <Row className="overflow-auto my-3 flex-grow-1">
-              <Col id="messages-box" className="chat-messages px-4">
-                <ChatBody />
-              </Col>
-            </Row>
+              <Row className="overflow-auto my-3 flex-grow-1">
+                <Col id="messages-box" className="chat-messages px-4">
+                  <ChatBody />
+                </Col>
+              </Row>
 
-            <Row className="my-3">
-              <Col>
-                <ChatMessageForm />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Col>
+              <Row className="my-3">
+                <Col>
+                  <ChatMessageForm />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Col>
+      ) : (
+        <div className="d-flex align-items-center justify-content-center h-100">
+        <Spinner animation="grow" />
+        </div>
+      )}
     </Row>
   );
 };

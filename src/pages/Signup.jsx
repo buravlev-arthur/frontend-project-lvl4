@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Form, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import AuthContext from "../contexts/AuthContext";
 import Input from '../formElements/Input';
 import routes from '../routes';
@@ -14,7 +15,14 @@ const SignUp = () => {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const rollbar = useRollbar();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (auth.userIsLogged()) {
+      navigate(routes.pages.chat);
+    }
+  }, []);
 
   yup.setLocale({
     string: {
@@ -39,9 +47,12 @@ const SignUp = () => {
         auth.logIn(token, username);
         navigate(routes.pages.chat);
       })
-      .catch(({ response: { status } }) => {
+      .catch((error) => {
+        const { response: { status } } = error;
+
         if (status === 500) {
           toast.error(t('notification.sendDataError'));
+          rollbar.error(t('notification.sendDataError'), error, { username, password });
           return;
         };
         setAuthError(true);

@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useRollbar } from '@rollbar/react';
 import routes from '../routes';
 import Input from '../formElements/Input';
 import AuthContext from '../contexts/AuthContext';
@@ -14,6 +15,7 @@ const Login = () => {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const rollbar = useRollbar();
   const { t } = useTranslation();
 
   yup.setLocale({
@@ -34,7 +36,7 @@ const Login = () => {
     if (auth.userIsLogged()) {
       navigate(routes.pages.chat);
     }
-  });
+  }, []);
 
   const submit = (formData, setSubmitting) => {
     axios.post(routes.login, formData)
@@ -42,9 +44,12 @@ const Login = () => {
         auth.logIn(token, formData.username);
         navigate(routes.pages.chat);
       })
-      .catch(({ response: { status } }) => {
+      .catch((error) => {
+        const { response: { status } } = error;
+
         if (status === 500) {
           toast.error(t('notification.sendDataError'));
+          rollbar.error(t('notification.sendDataError'), error, { formData });
           return;
         };
         setAuthError(true);
