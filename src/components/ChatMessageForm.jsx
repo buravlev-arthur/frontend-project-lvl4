@@ -5,6 +5,7 @@ import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { ArrowRightCircleFill } from 'react-bootstrap-icons';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import filter from 'leo-profanity';
 import AuthContext from '../contexts/AuthContext';
 import { sendMessage } from '../socket';
 
@@ -13,18 +14,22 @@ const ChatMessageForm = () => {
   const auth = useContext(AuthContext);
   const { t } = useTranslation();
 
+  filter.loadDictionary('ru');
+
   const schema = yup.object({
     message: yup.string().required(),
   });
+
+  const submit = (message, resetForm) => {
+    const data = { body: filter.clean(message, '*'), channelId: currentChannelId, username: auth.getUsername() };
+    sendMessage(data, resetForm);
+  };
 
   return (
     <Formik
     initialValues={{ message: '' }}
     validationSchema={schema}
-    onSubmit={({ message }, { resetForm }) => {
-      const data = { body: message, channelId: currentChannelId, username: auth.getUsername() };
-      sendMessage(data, resetForm);
-    }}
+    onSubmit={({ message }, { resetForm }) => submit(message, resetForm)}
     >
       {({ getFieldProps, handleSubmit, isSubmitting, dirty }) => (
         <Form className="border rounded" onSubmit={handleSubmit}>

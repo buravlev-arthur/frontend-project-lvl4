@@ -5,6 +5,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { toast } from "react-toastify";
+import filter from 'leo-profanity';
 import { selectors } from '../store/channelsSlice';
 import { addNewChannel, deleteChannel, setChannelName } from '../socket';
 
@@ -12,6 +13,8 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
   const inputEl = useRef();
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
   const { t } = useTranslation();
+
+  filter.loadDictionary('ru');
   
   const callback = (action) => () => {
     toast.success(t(`notification.${action}Channel`));
@@ -44,7 +47,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
       props: {
         initialValues: { name: '' },
         validationSchema: schema,
-        onSubmit: ({ name }) => addNewChannel(name, callback('add')),
+        onSubmit: ({ name }) => addNewChannel(filter.clean(name, '*'), callback('add')),
       },
     },
     remove: {
@@ -64,7 +67,7 @@ const ModalWindow = ({ show, close, type, channelId, channelName }) => {
         enableReinitialize: true,
         initialValues: { name: channelName },
         validationSchema: schema,
-        onSubmit: ({ name }) => setChannelName({ id: channelId, name }, callback('rename')),
+        onSubmit: ({ name }) => setChannelName({ id: channelId, name: filter.clean(name, '*') }, callback('rename')),
       },
     },
   };
