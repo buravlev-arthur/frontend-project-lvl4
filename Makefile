@@ -12,3 +12,9 @@ remote-start:
 
 deploy:
 	git push heroku main
+
+lint:
+	npm run lint
+
+build:
+	npm run build
