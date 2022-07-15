@@ -25,10 +25,6 @@ const SignUp = () => {
   }, []);
 
   yup.setLocale({
-    string: {
-      min: ({ min }) => t('formErrors.min', { count: min }),
-      max: t('formErrors.max', { count: 20 }),
-    },
     mixed: {
       required: t('formErrors.required'),
       oneOf: t('formErrors.confirmPassword'),
@@ -36,9 +32,16 @@ const SignUp = () => {
   });
 
   const schema = yup.object({
-    username: yup.string().min(3).max(20).required(),
-    password: yup.string().min(6).required(),
-    confirmPassword: yup.string().oneOf([yup.ref('password')]).required(),
+    username: yup.string()
+      .min(3, t('formErrors.usernameMinMax', { min: 3, max: 20 }))
+      .max(20, t('formErrors.usernameMinMax', { min: 3, max: 20 }))
+      .required(),
+    password: yup.string()
+      .min(6, t('formErrors.passwordMin', { min: 6 }))
+      .required(),
+    confirmPassword: yup.string()
+      .oneOf([yup.ref('password')])
+      .required(),
   });
 
   const submit = ({ username, password }, setSubmitting) => {
@@ -51,8 +54,8 @@ const SignUp = () => {
         const { response: { status } } = error;
 
         if (status === 500) {
-          toast.error(t('notification.sendDataError'));
-          rollbar.error(t('notification.sendDataError'), error, { username, password });
+          toast.error(t('notification.loadingError'));
+          rollbar.error(t('notification.loadingError'), error, { username, password });
           return;
         };
         setAuthError(true);

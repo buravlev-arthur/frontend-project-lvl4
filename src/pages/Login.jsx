@@ -19,16 +19,13 @@ const Login = () => {
   const { t } = useTranslation();
 
   yup.setLocale({
-    string: {
-      min: ({ min }) => t('formErrors.min', { count: min }),
-    },
     mixed: {
       required: t('formErrors.required'),
     }
   });
   
   const schema = yup.object({
-    username: yup.string().min(3).required(),
+    username: yup.string().required(),
     password: yup.string().required(),
   });
 
@@ -48,8 +45,8 @@ const Login = () => {
         const { response: { status } } = error;
 
         if (status === 500) {
-          toast.error(t('notification.sendDataError'));
-          rollbar.error(t('notification.sendDataError'), error, { formData });
+          toast.error(t('notification.loadingError'));
+          rollbar.error(t('notification.loadingError'), error, { formData });
           return;
         };
         setAuthError(true);

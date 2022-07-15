@@ -47,6 +47,7 @@ const ChatMessageForm = () => {
               disabled={!dirty || isSubmitting}
             >
               <ArrowRightCircleFill size={20} />
+              <span className="visually-hidden">{t('chat.form.submitButton')}</span>
             </Button>
           </InputGroup>
         </Form>

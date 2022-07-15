@@ -2,7 +2,7 @@ install:
 	npm ci
 
 start-backend:
-	npx start-server -p 5001
+	npx start-server
 
 start-frontend:
 	npm start
