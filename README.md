@@ -3,7 +3,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/140610c9a135db0dec0c/maintainability)](https://codeclimate.com/github/buravlev-arthur/frontend-project-lvl4/maintainability)
 
 # Hexlet Chat
-Веб-приложение, реализующее функционал чата, работающего на основе протокола WebSoket, с возможностью создания и управлениями каналами.
+Веб-приложение, реализующее функционал чата, работающего на основе протокола WebSocket, с возможностью создания и управлениями каналами.
 
 ## Основные библиотеки и технологии:
 - React;
