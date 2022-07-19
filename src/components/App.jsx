@@ -23,11 +23,10 @@ const App = () => {
   const actions = initSocket();
   const { pages: { login, chat, signup } } = routes;
 
-  const rollbarConfig = {
+  const rollbar = new Rollbar({
     accessToken: process.env.REACT_APP_ACCESS_TOKEN,
     environment: 'production',
-  };
-  const rollbar = new Rollbar(rollbarConfig);
+  });
 
   return (
     <RollbarProvider instance={rollbar}>

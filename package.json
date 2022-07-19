@@ -33,7 +33,8 @@
     "autoprefixer": "10.4.5"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "start-server -s ./build",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "lint": "npx eslint --ext .jsx,.js src/"
   },
