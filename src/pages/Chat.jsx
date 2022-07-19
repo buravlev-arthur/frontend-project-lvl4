@@ -1,5 +1,5 @@
-import { useEffect, useContext, useState } from 'react';
-import { useDispatch, batch } from 'react-redux';
+import { useEffect, useContext, useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -17,11 +17,16 @@ import { addMessages } from '../store/messagesSlice';
 
 const Chat = () => {
   const [loaded, setLoaded] = useState(false);
+  const messagesBoxEl = useRef();
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const rollbar = useRollbar();
   const { t } = useTranslation();
+
+  const scrollDown = () => {
+    messagesBoxEl.current.scrollIntoView({ block: 'end', behavior: 'smooth' });
+  };
 
   useEffect(() => {
     if (!auth.userIsLogged()) {
@@ -32,12 +37,9 @@ const Chat = () => {
 
     axios.get(routes.data, { headers: auth.getAuthHeader() })
       .then(({ data }) => {
-        batch(() => {
-          dispatch(addChannels(data.channels));
-          dispatch(setCurrentChannelId(data.currentChannelId));
-          dispatch(addMessages(data.messages));
-        });
-
+        dispatch(addChannels(data.channels));
+        dispatch(setCurrentChannelId(data.currentChannelId));
+        dispatch(addMessages(data.messages));
         setLoaded(true);
       })
       .catch((error) => {
@@ -63,8 +65,8 @@ const Chat = () => {
               </Row>
 
               <Row className="overflow-auto my-3 flex-grow-1">
-                <Col id="messages-box" className="chat-messages px-4">
-                  <ChatBody />
+                <Col id="messages-box" className="chat-messages px-4" ref={messagesBoxEl}>
+                  <ChatBody scrollDown={scrollDown} />
                 </Col>
               </Row>
 

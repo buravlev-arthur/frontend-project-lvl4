@@ -67,7 +67,7 @@ const Login = () => {
             <Form onSubmit={handleSubmit}>
               <Input
                 id="userName"
-                authError={String(authError)}
+                error={authError}
                 type="text"
                 label={t('login.username')}
                 {...getFieldProps('username')}
@@ -75,7 +75,7 @@ const Login = () => {
 
               <Input
                 id="password"
-                authError={String(authError)}
+                error={authError}
                 type="password"
                 label={t('login.password')}
                 {...getFieldProps('password')}

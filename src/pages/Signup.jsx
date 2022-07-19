@@ -76,7 +76,7 @@ const SignUp = () => {
             <Form onSubmit={handleSubmit}>
               <Input
                 id="username"
-                authError={String(authError)}
+                error={authError}
                 type="text"
                 label={t('signUp.username')}
                 {...getFieldProps('username')}
@@ -84,7 +84,7 @@ const SignUp = () => {
 
               <Input
                 id="password"
-                authError={false}
+                error={false}
                 type="password"
                 label={t('signUp.password')}
                 {...getFieldProps('password')}
@@ -92,7 +92,7 @@ const SignUp = () => {
 
               <Input
                 id="confirmPassword"
-                authError={false}
+                error={false}
                 type="password"
                 label={t('signUp.confirmPassword')}
                 {...getFieldProps('confirmPassword')}

@@ -1,12 +1,17 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectors as messagesSelectors } from '../store/messagesSlice';
 
-const ChatBody = () => {
+const ChatBody = ({ scrollDown }) => {
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const messages = useSelector(messagesSelectors.selectAll);
   const filtredMessages = messages.filter(({ channelId }) => channelId === currentChannelId);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    scrollDown();
+  });
 
   return (
     <>
