@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
@@ -7,11 +7,12 @@ import * as yup from 'yup';
 import { toast } from "react-toastify";
 import filter from 'leo-profanity';
 import { selectors } from '../store/channelsSlice';
-import { addNewChannel, deleteChannel, setChannelName } from '../socket';
+import SocketContext from '../contexts/SocketContext';
 
 const ModalWindow = ({ show, close, type, channelId, channelName }) => {
   const inputEl = useRef();
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
+  const { addNewChannel, deleteChannel, setChannelName } = useContext(SocketContext);
   const { t } = useTranslation();
 
   filter.loadDictionary('ru');

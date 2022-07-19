@@ -7,11 +7,12 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import filter from 'leo-profanity';
 import AuthContext from '../contexts/AuthContext';
-import { sendMessage } from '../socket';
+import SocketContext from '../contexts/SocketContext';
 
 const ChatMessageForm = () => {
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const auth = useContext(AuthContext);
+  const { sendMessage } = useContext(SocketContext);
   const { t } = useTranslation();
 
   filter.loadDictionary('ru');
