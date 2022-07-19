@@ -8,10 +8,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import App from './components/App';
 import store from './store/index';
-import i18n from './i18n';
+import i18n, { setI18n } from './i18n';
+
+setI18n();
 
 const rollbarConfig = {
-  accessToken: '49d539df7c9441d5a0e6c7928c743dc9',
+  accessToken: process.env.REACT_APP_ACCESS_TOKEN,
   environment: 'production',
 };
 
