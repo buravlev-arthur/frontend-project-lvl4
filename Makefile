@@ -15,6 +15,3 @@ lint:
 
 build:
 	npm run build
-
-testvar:
-	node ./src/test.js
