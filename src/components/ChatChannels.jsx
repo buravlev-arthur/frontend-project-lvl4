@@ -1,10 +1,9 @@
-import { useImmer } from 'use-immer';
 import { useTranslation } from 'react-i18next';
 import { Button, Nav, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { PlusCircle } from 'react-bootstrap-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectors, setCurrentChannelId } from '../store/channelsSlice';
-import ModalWindow from './ModalWindow';
+import { openModalWindow } from '../store/modalSlice';
 
 const ChatChannels = () => {
   const channels = useSelector(selectors.selectAll);
@@ -12,23 +11,9 @@ const ChatChannels = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [modalSettings, updateModalSettings] = useImmer({
-    type: 'add',
-    show: false,
-    channelId: null,
-    channelName: '',
-  });
-
   const openModal = (type, channelId = null, channelName = '') => () => {
-    updateModalSettings((draft) => {
-      draft.type = type;
-      draft.show = true;
-      draft.channelId = channelId;
-      draft.channelName = channelName;
-    });
+    dispatch(openModalWindow({ show: true, type, channelId, channelName }));
   };
-
-  const closeModal = () => updateModalSettings((draft) => {draft.show = false});
 
   const select = (channelId) => () => {
     dispatch(setCurrentChannelId(channelId));
@@ -71,8 +56,6 @@ const ChatChannels = () => {
           )
         })}
       </Nav>
-
-      <ModalWindow close={closeModal} {...modalSettings} />
     </>
   );
 };

@@ -12,6 +12,7 @@ import store from '../store/index';
 import i18n, { setI18n } from '../i18n';
 import initSocket from '../socket';
 import Header from './Header';
+import ModalWindow from './ModalWindow';
 import Login from '../pages/Login';
 import Chat from '../pages/Chat';
 import SignUp from '../pages/Signup';
@@ -45,6 +46,7 @@ const App = () => {
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                     <ToastContainer position="bottom-right" />
+                    <ModalWindow />
                   </BrowserRouter>
                 </Container>
               </AuthProvider>

@@ -1,21 +1,28 @@
 import { useRef, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { toast } from "react-toastify";
 import filter from 'leo-profanity';
+import { closeModalWindow } from '../store/modalSlice';
 import { selectors } from '../store/channelsSlice';
 import SocketContext from '../contexts/SocketContext';
 
-const ModalWindow = ({ show, close, type, channelId, channelName }) => {
+const ModalWindow = () => {
+  const { show, type, channelId, channelName } = useSelector(({ modalWindow }) => modalWindow.params);
+  const dispatch = useDispatch();
   const inputEl = useRef();
   const channels = useSelector(selectors.selectAll).map(({ name }) => name);
   const { addNewChannel, deleteChannel, setChannelName } = useContext(SocketContext);
   const { t } = useTranslation();
 
   filter.loadDictionary('ru');
+
+  const close = () => {
+    dispatch(closeModalWindow());
+  };
   
   const callback = (action) => () => {
     toast.success(t(`notification.${action}Channel`));
