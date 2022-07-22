@@ -1,5 +1,5 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
 import resources from './languages/index';
 
 const setI18n = () => {
@@ -7,7 +7,7 @@ const setI18n = () => {
     .use(initReactI18next)
     .init({
       resources,
-      lng: "ru",
+      lng: 'ru',
       interpolation: {
         escapeValue: false,
       },

@@ -1,9 +1,10 @@
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
-import { Provider as  StoreProvider } from 'react-redux';
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Provider as StoreProvider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { I18nextProvider } from 'react-i18next';
 import AuthProvider from '../providers/AuthProvider';
 import SocketProvider from '../providers/SocketProvider';
@@ -18,7 +19,7 @@ import SignUp from '../pages/Signup';
 import NotFound from '../pages/NotFound';
 import routes from '../routes';
 
-const App = () => {
+export default function App() {
   setI18n();
   const actions = initSocket();
   const { pages: { login, chat, signup } } = routes;
@@ -55,6 +56,4 @@ const App = () => {
       </ErrorBoundary>
     </RollbarProvider>
   );
-};
-
-export default App;
+}

@@ -1,4 +1,9 @@
-import { useEffect, useContext, useState, useRef } from 'react';
+import React, {
+  useEffect,
+  useContext,
+  useState,
+  useRef,
+} from 'react';
 import { useDispatch } from 'react-redux';
 import { Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +20,7 @@ import routes from '../routes';
 import { addChannels, setCurrentChannelId } from '../store/channelsSlice';
 import { addMessages } from '../store/messagesSlice';
 
-const Chat = () => {
+export default function Chat() {
   const [loaded, setLoaded] = useState(false);
   const messagesBoxEl = useRef();
   const auth = useContext(AuthContext);
@@ -30,10 +35,10 @@ const Chat = () => {
 
   useEffect(() => {
     if (!auth.userIsLogged()) {
-      const { pages: { login } } = routes; 
+      const { pages: { login } } = routes;
       navigate(login);
       return;
-    };
+    }
 
     axios.get(routes.data, { headers: auth.getAuthHeader() })
       .then(({ data }) => {
@@ -80,11 +85,9 @@ const Chat = () => {
         </Col>
       ) : (
         <div className="d-flex align-items-center justify-content-center h-100">
-        <Spinner animation="grow" />
+          <Spinner animation="grow" />
         </div>
       )}
     </Row>
   );
-};
-
-export default Chat;
+}

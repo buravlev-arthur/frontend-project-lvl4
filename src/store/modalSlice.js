@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -5,7 +6,7 @@ const initialState = {
     show: false,
     type: 'add',
     channelId: null,
-    channelName: ''
+    channelName: '',
   },
 };
 
@@ -18,7 +19,7 @@ const modalAdapter = createSlice({
     },
     closeModalWindow: (state) => {
       state.params.show = false;
-    }
+    },
   },
 });
 

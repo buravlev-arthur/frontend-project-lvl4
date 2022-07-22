@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 const channelsAdapter = createEntityAdapter();
@@ -31,6 +32,6 @@ export const {
   renameChannel,
   setCurrentChannelId,
   setDefaultChannel,
-} = channelsSlice.actions; 
+} = channelsSlice.actions;
 
 export default channelsSlice.reducer;

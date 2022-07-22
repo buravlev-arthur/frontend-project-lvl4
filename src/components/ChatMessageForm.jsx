@@ -1,7 +1,13 @@
-import { useContext } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
+import {
+  Form,
+  InputGroup,
+  FormControl,
+  Button,
+} from 'react-bootstrap';
 import { ArrowRightCircleFill } from 'react-bootstrap-icons';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -9,7 +15,7 @@ import filter from 'leo-profanity';
 import AuthContext from '../contexts/AuthContext';
 import SocketContext from '../contexts/SocketContext';
 
-const ChatMessageForm = () => {
+export default function ChatMessageForm() {
   const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
   const auth = useContext(AuthContext);
   const { sendMessage } = useContext(SocketContext);
@@ -28,11 +34,16 @@ const ChatMessageForm = () => {
 
   return (
     <Formik
-    initialValues={{ message: '' }}
-    validationSchema={schema}
-    onSubmit={({ message }, { resetForm }) => submit(message, resetForm)}
+      initialValues={{ message: '' }}
+      validationSchema={schema}
+      onSubmit={({ message }, { resetForm }) => submit(message, resetForm)}
     >
-      {({ getFieldProps, handleSubmit, isSubmitting, dirty }) => (
+      {({
+        getFieldProps,
+        handleSubmit,
+        isSubmitting,
+        dirty,
+      }) => (
         <Form className="border rounded" onSubmit={handleSubmit}>
           <InputGroup>
             <FormControl
@@ -55,6 +66,4 @@ const ChatMessageForm = () => {
       )}
     </Formik>
   );
-};
-
-export default ChatMessageForm;
+}

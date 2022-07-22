@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../contexts/AuthContext';
 import routes from '../routes';
 
-const Header = () => {
+export default function Header() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -24,6 +24,4 @@ const Header = () => {
       </Col>
     </Row>
   );
-};
-
-export default Header;
+}

@@ -1,6 +1,12 @@
-import { useState, useContext, useEffect } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -11,7 +17,7 @@ import routes from '../routes';
 import Input from '../formElements/Input';
 import AuthContext from '../contexts/AuthContext';
 
-const Login = () => {
+export default function Login() {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -21,9 +27,9 @@ const Login = () => {
   yup.setLocale({
     mixed: {
       required: t('formErrors.required'),
-    }
+    },
   });
-  
+
   const schema = yup.object({
     username: yup.string().required(),
     password: yup.string().required(),
@@ -48,7 +54,7 @@ const Login = () => {
           toast.error(t('notification.loadingError'));
           rollbar.error(t('notification.loadingError'), error, { formData });
           return;
-        };
+        }
         setAuthError(true);
       })
       .finally(() => setSubmitting(false));
@@ -106,6 +112,4 @@ const Login = () => {
       </Col>
     </Row>
   );
-};
-
-export default Login;
+}

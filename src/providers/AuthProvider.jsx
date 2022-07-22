@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import AuthContext from '../contexts/AuthContext';
 
-const AuthProvider = ({ children }) => {
-  const userIsLogged = () => localStorage.getItem('userId') ? true : false;
+export default function AuthProvider({ children }) {
+  const userIsLogged = () => {
+    if (localStorage.getItem('userId')) {
+      return true;
+    }
+    return false;
+  };
+
   const [logged, setLogged] = useState(userIsLogged());
 
   const logIn = (token, username) => {
@@ -28,11 +34,18 @@ const AuthProvider = ({ children }) => {
     return { Authorization: `Bearer ${token}` };
   };
 
+  const auth = useMemo(() => ({
+    logged,
+    logIn,
+    logOut,
+    userIsLogged,
+    getAuthHeader,
+    getUsername,
+  }));
+
   return (
-    <AuthContext.Provider value={{logged, logIn, logOut, userIsLogged, getAuthHeader, getUsername }}>
+    <AuthContext.Provider value={auth}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export default AuthProvider;
+}

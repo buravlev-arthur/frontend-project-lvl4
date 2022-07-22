@@ -1,34 +1,40 @@
-import { useContext, useState, useEffect } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Row, Col, Form, Button } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Form,
+  Button,
+} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useRollbar } from '@rollbar/react';
-import AuthContext from "../contexts/AuthContext";
+import AuthContext from '../contexts/AuthContext';
 import Input from '../formElements/Input';
 import routes from '../routes';
 
-const SignUp = () => {
+export default function SignUp() {
   const [authError, setAuthError] = useState(false);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const rollbar = useRollbar();
   const { t } = useTranslation();
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (auth.userIsLogged()) {
       navigate(routes.pages.chat);
     }
-  }, []);*/
+  }, []);
 
   yup.setLocale({
     mixed: {
       required: t('formErrors.required'),
       oneOf: t('formErrors.confirmPassword'),
-    }
+    },
   });
 
   const schema = yup.object({
@@ -57,7 +63,7 @@ const SignUp = () => {
           toast.error(t('notification.loadingError'));
           rollbar.error(t('notification.loadingError'), error, { username, password });
           return;
-        };
+        }
         setAuthError(true);
       })
       .finally(() => setSubmitting(false));
@@ -72,7 +78,11 @@ const SignUp = () => {
           validationSchema={schema}
           onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
         >
-          {({ handleSubmit, getFieldProps, isSubmitting, errors }) => (
+          {({
+            handleSubmit,
+            getFieldProps,
+            isSubmitting,
+          }) => (
             <Form onSubmit={handleSubmit}>
               <Input
                 id="username"
@@ -97,7 +107,7 @@ const SignUp = () => {
                 label={t('signUp.confirmPassword')}
                 {...getFieldProps('confirmPassword')}
               />
-              
+
               {authError ? <Form.Text className="text-danger">{t('formErrors.userExists')}</Form.Text> : null}
 
               <div className="my-4 d-grid">
@@ -115,6 +125,4 @@ const SignUp = () => {
       </Col>
     </Row>
   );
-};
-
-export default SignUp;
+}

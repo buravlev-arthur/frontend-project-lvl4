@@ -1,11 +1,11 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import AuthContext from '../contexts/AuthContext';
 import routes from '../routes';
 
-const NotFound = () => {
+export default function NotFound() {
   const auth = useContext(AuthContext);
   const { t } = useTranslation();
 
@@ -24,6 +24,4 @@ const NotFound = () => {
       </Col>
     </Row>
   );
-};
-
-export default NotFound;
+}

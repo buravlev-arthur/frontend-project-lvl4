@@ -1,6 +1,7 @@
+import React, { useMemo } from 'react';
 import SocketContext from '../contexts/SocketContext';
 
-const SocketProvider = ({ actions, children }) => {
+export default function SocketProvider({ actions, children }) {
   const {
     sendMessage,
     addNewChannel,
@@ -8,11 +9,16 @@ const SocketProvider = ({ actions, children }) => {
     setChannelName,
   } = actions;
 
+  const emits = useMemo(() => ({
+    sendMessage,
+    addNewChannel,
+    deleteChannel,
+    setChannelName,
+  }));
+
   return (
-    <SocketContext.Provider value={{ sendMessage, addNewChannel, deleteChannel, setChannelName }}>
+    <SocketContext.Provider value={emits}>
       {children}
     </SocketContext.Provider>
   );
-};
-
-export default SocketProvider;
+}
