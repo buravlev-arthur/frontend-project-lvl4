@@ -59,6 +59,7 @@ const SignUp = () => {
           return;
         };
         setAuthError(true);
+        throw error;
       })
       .finally(() => setSubmitting(false));
   };
