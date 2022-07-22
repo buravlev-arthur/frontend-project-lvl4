@@ -72,7 +72,7 @@
     },
 
     "formErrors": {
-      "passwordMin": "Должен содержать не менее {{min}} символов",
+      "passwordMin": "Не менее {{min}} символов",
       "usernameMinMax": "От {{min}} до {{max}} символов",
       "required": "Обязательное поле",
       "confirmPassword": "Пароли должны совпадать",
