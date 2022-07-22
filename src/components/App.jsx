@@ -24,13 +24,13 @@ const App = () => {
   const actions = initSocket();
   const { pages: { login, chat, signup } } = routes;
 
-  const rollbar = new Rollbar({
+  const rollbarConfig = {
     accessToken: process.env.REACT_APP_ACCESS_TOKEN,
     environment: 'production',
-  });
+  };
 
   return (
-    <RollbarProvider instance={rollbar}>
+    <RollbarProvider config={rollbarConfig}>
       <ErrorBoundary errorMessage="Error in React render">
         <StoreProvider store={store}>
           <I18nextProvider i18n={i18n}>
