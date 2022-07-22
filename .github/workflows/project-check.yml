@@ -25,4 +25,4 @@ jobs:
         run: make lint
 
       - name: Building project
-        run: make build
+        run: make build-project

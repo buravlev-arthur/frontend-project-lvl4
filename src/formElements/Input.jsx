@@ -12,7 +12,7 @@ export default function Input({ label, error, ...props }) {
           placeholder={label}
           isInvalid={(!!meta.error || error) && meta.touched}
           {...field}
-          {...props}
+          type={props.type}
           required
         />
         <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
