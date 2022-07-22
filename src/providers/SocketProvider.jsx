@@ -14,7 +14,7 @@ export default function SocketProvider({ actions, children }) {
     addNewChannel,
     deleteChannel,
     setChannelName,
-  }), []);
+  }), [sendMessage, addNewChannel, deleteChannel, setChannelName]);
 
   return (
     <SocketContext.Provider value={emits}>
