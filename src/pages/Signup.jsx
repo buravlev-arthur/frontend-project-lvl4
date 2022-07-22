@@ -18,11 +18,11 @@ const SignUp = () => {
   const rollbar = useRollbar();
   const { t } = useTranslation();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (auth.userIsLogged()) {
       navigate(routes.pages.chat);
     }
-  }, []);
+  }, []);*/
 
   yup.setLocale({
     mixed: {
@@ -72,7 +72,7 @@ const SignUp = () => {
           validationSchema={schema}
           onSubmit={(values, { setSubmitting }) => submit(values, setSubmitting)}
         >
-          {({ handleSubmit, getFieldProps, isSubmitting }) => (
+          {({ handleSubmit, getFieldProps, isSubmitting, errors }) => (
             <Form onSubmit={handleSubmit}>
               <Input
                 id="username"

@@ -41,7 +41,9 @@
       "channels": {
         "header": "Каналы",
         "removeButton": "Удалить",
-        "renameButton": "Переименовать"
+        "renameButton": "Переименовать",
+        "toggleButton": "Управление каналом",
+        "addButton": "+"
       },
 
       "header": {
@@ -53,6 +55,7 @@
       "modalWindow": {
         "add": {
           "header": "Добавить канал",
+          "label": "Имя канала",
           "submit": "Добавить"
         },
 
@@ -64,6 +67,7 @@
 
         "rename": {
           "header": "Переименовать канал",
+          "label": "Имя канала",
           "submit": "Переименовать"
         },
 
@@ -82,9 +86,9 @@
     },
 
     "notification": {
-      "addChannel": "Канал успешно добавлен",
-      "removeChannel": "Канал успешно удалён",
-      "renameChannel": "Канал успешно переименован",
+      "addChannel": "Канал создан",
+      "removeChannel": "Канал удалён",
+      "renameChannel": "Канал переименован",
       "loadingError": "Ошибка соединения"
     }
   }

@@ -6,10 +6,10 @@ const Input = ({label, error, ...props}) => {
   const [field, meta] = useField(props);
   return (
     <>
-      <Form.Group controlId={props.id} className="mb-3">
-        <FloatingLabel label={label}>
-          <Form.Control placeholder={label} isInvalid={!!meta.error || error} {...field} {...props} />
-          <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>  
+      <Form.Group className="mb-3">
+        <FloatingLabel label={label} controlId={props.id}>
+          <Form.Control placeholder={label} isInvalid={(!!meta.error || error) && meta.touched} {...field} {...props} required />
+          <Form.Control.Feedback type="invalid">{meta.error}</Form.Control.Feedback>
         </FloatingLabel>        
       </Form.Group>      
     </>

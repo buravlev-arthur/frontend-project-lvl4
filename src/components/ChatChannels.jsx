@@ -26,6 +26,7 @@ const ChatChannels = () => {
         <div className="align-self-center">
           <Button variant="link text-dark p-0" onClick={openModal('add')}>
             <PlusCircle />
+            <span className="visually-hidden">{t('chat.channels.addButton')}</span>
           </Button>
         </div>
       </div>
@@ -40,7 +41,9 @@ const ChatChannels = () => {
                 <Button variant={buttonStyle} className="text-start w-100 text-truncate" onClick={select(id)}>
                   <span>#</span> {name}
                 </Button>
-                <Dropdown.Toggle split variant={buttonStyle} className="flex-grow-0 text-end" />
+                <Dropdown.Toggle split variant={buttonStyle} className="flex-grow-0 text-end">
+                  <span className="visually-hidden">{t('chat.channels.toggleButton')}</span>
+                </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={openModal('remove', id, name)}>{t('chat.channels.removeButton')}</Dropdown.Item>
                   <Dropdown.Item onClick={openModal('rename', id, name)}>{t('chat.channels.renameButton')}</Dropdown.Item>

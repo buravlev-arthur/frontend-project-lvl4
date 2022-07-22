@@ -50,6 +50,7 @@ const ModalWindow = () => {
   const config = {
     add: {
       header: t('chat.modalWindow.add.header'),
+      label: t('chat.modalWindow.add.label'),
       submit: t('chat.modalWindow.add.submit'),
       submitType: 'dark',
       props: {
@@ -69,6 +70,7 @@ const ModalWindow = () => {
     },
     rename: {
       header: t('chat.modalWindow.rename.header'),
+      label: t('chat.modalWindow.rename.label'),
       submit: t('chat.modalWindow.rename.submit'),
       submitType: 'dark',
       props: {
@@ -95,8 +97,9 @@ const ModalWindow = () => {
               {type === 'remove' ? (
                 <p className="lead">{t('chat.modalWindow.remove.warning', { name: channelName })}</p>
               ) : (
-                <Form.Group className="mb-3 modal-input-block" controlId="name">
-                  <Form.Control ref={inputEl} type="text" {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
+                <Form.Group className="mb-3 modal-input-block">
+                  <Form.Label htmlFor="name" className="visually-hidden">{set.label}</Form.Label>
+                  <Form.Control id="name" ref={inputEl} type="text" {...getFieldProps('name')} isInvalid={!!errors.name}></Form.Control>
                   <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                 </Form.Group>
               )}

@@ -66,7 +66,7 @@ const Login = () => {
           {({ getFieldProps, handleSubmit, isSubmitting }) => (
             <Form onSubmit={handleSubmit}>
               <Input
-                id="userName"
+                id="username"
                 error={authError}
                 type="text"
                 label={t('login.username')}

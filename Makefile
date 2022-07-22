@@ -13,5 +13,5 @@ deploy:
 lint:
 	npm run lint
 
-build:
+build-project:
 	npm run build
