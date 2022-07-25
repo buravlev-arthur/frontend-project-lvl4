@@ -41,7 +41,7 @@ export default function AuthProvider({ children }) {
     userIsLogged,
     getAuthHeader,
     getUsername,
-  }), [logged, getAuthHeader]);
+  }), [logged]);
 
   return (
     <AuthContext.Provider value={auth}>
