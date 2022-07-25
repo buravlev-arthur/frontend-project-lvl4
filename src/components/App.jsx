@@ -6,6 +6,7 @@ import { Provider as StoreProvider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { I18nextProvider } from 'react-i18next';
+import filter from 'leo-profanity';
 import AuthProvider from '../providers/AuthProvider';
 import SocketProvider from '../providers/SocketProvider';
 import store from '../store/index';
@@ -23,6 +24,8 @@ export default function App() {
   setI18n();
   const actions = initSocket();
   const { pages: { login, chat, signup } } = routes;
+
+  filter.loadDictionary('ru');
 
   const rollbarConfig = {
     accessToken: process.env.REACT_APP_ACCESS_TOKEN,

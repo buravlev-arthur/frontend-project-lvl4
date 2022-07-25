@@ -24,8 +24,6 @@ export default function ModalWindow() {
   const { addNewChannel, deleteChannel, setChannelName } = useContext(SocketContext);
   const { t } = useTranslation();
 
-  filter.loadDictionary('ru');
-
   const close = () => {
     dispatch(closeModalWindow());
   };
@@ -40,7 +38,7 @@ export default function ModalWindow() {
       inputEl.current.focus();
       inputEl.current.select();
     }
-  }, [show]);
+  }, [show, type]);
 
   yup.setLocale({
     mixed: {

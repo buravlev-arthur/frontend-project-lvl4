@@ -21,8 +21,6 @@ export default function ChatMessageForm() {
   const { sendMessage } = useContext(SocketContext);
   const { t } = useTranslation();
 
-  filter.loadDictionary('ru');
-
   const schema = yup.object({
     message: yup.string().required(),
   });

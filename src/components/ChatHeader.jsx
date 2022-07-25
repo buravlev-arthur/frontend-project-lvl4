@@ -1,15 +1,28 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 import { selectors as channelsSelectors } from '../store/channelsSlice';
 import { selectors as messagesSelectors } from '../store/messagesSlice';
 
+const chatData = createSelector(
+  (state) => state,
+  (state) => {
+    const { currentChannelId } = state.channels;
+    const currentChannelName = useSelector((state) => channelsSelectors
+      .selectById(state, currentChannelId))?.name;
+    const messagesCount = useSelector(messagesSelectors.selectAll)
+      .filter(({ channelId }) => channelId === currentChannelId).length;
+
+    return {
+      currentChannelName,
+      messagesCount,
+    };
+  }
+);
+
 export default function ChatHeader() {
-  const currentChannelId = useSelector(({ channels }) => channels.currentChannelId);
-  const currentChannel = useSelector((state) => channelsSelectors
-    .selectById(state, currentChannelId));
-  const messages = useSelector(messagesSelectors.selectAll);
-  const messagesCount = messages.filter(({ channelId }) => channelId === currentChannelId);
+  const { currentChannelName, messagesCount } = useSelector(chatData);
   const { t } = useTranslation();
 
   return (
@@ -18,11 +31,11 @@ export default function ChatHeader() {
         <small>
           #
           {' '}
-          {currentChannel?.name}
+          {currentChannelName}
         </small>
       </div>
       <div className="text-muted">
-        <small>{t('chat.header.count', { count: messagesCount.length })}</small>
+        <small>{t('chat.header.count', { count: messagesCount })}</small>
       </div>
     </>
   );
