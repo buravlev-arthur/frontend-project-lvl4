@@ -4,33 +4,21 @@ import Container from 'react-bootstrap/Container';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 import { Provider as StoreProvider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import i18n from '../i18n';
 import 'react-toastify/dist/ReactToastify.css';
 import { I18nextProvider } from 'react-i18next';
-import filter from 'leo-profanity';
 import AuthProvider from '../providers/AuthProvider';
 import SocketProvider from '../providers/SocketProvider';
 import store from '../store/index';
-import i18n, { setI18n } from '../i18n';
-import initSocket from '../socket';
 import Header from './Header';
 import ModalWindow from './ModalWindow';
 import Login from '../pages/Login';
 import Chat from '../pages/Chat';
 import SignUp from '../pages/Signup';
 import NotFound from '../pages/NotFound';
-import routes from '../routes';
 
-export default function App() {
-  setI18n();
-  const actions = initSocket();
-  const { pages: { login, chat, signup } } = routes;
-
-  filter.loadDictionary('ru');
-
-  const rollbarConfig = {
-    accessToken: process.env.REACT_APP_ACCESS_TOKEN,
-    environment: 'production',
-  };
+export default function App({ config }) {
+  const { actions, pages, rollbarConfig } = config;
 
   return (
     <RollbarProvider config={rollbarConfig}>
@@ -43,9 +31,9 @@ export default function App() {
                   <BrowserRouter>
                     <Header />
                     <Routes>
-                      <Route path={chat} element={<Chat />} />
-                      <Route path={login} element={<Login />} />
-                      <Route path={signup} element={<SignUp />} />
+                      <Route path={pages.chat} element={<Chat />} />
+                      <Route path={pages.login} element={<Login />} />
+                      <Route path={pages.signup} element={<SignUp />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                     <ToastContainer position="bottom-right" />
