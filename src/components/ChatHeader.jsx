@@ -5,11 +5,12 @@ import { selectors as channelsSelectors } from '../store/channelsSlice';
 import { selectors as messagesSelectors } from '../store/messagesSlice';
 
 export default function ChatHeader() {
-  const { currentChannelName, messagesCount } = useSelector((state) => {
+  const chatData = useSelector((state) => {
     const { currentChannelId } = state.channels;
     const currentChannelName = channelsSelectors.selectById(state, currentChannelId)?.name;
     const messagesCount = messagesSelectors.selectAll(state)
       .filter(({ channelId }) => channelId === currentChannelId).length;
+
     return { currentChannelName, messagesCount };
   });
 
@@ -21,11 +22,11 @@ export default function ChatHeader() {
         <small>
           #
           {' '}
-          {currentChannelName}
+          {chatData.currentChannelName}
         </small>
       </div>
       <div className="text-muted">
-        <small>{t('chat.header.count', { count: messagesCount })}</small>
+        <small>{t('chat.header.count', { count: chatData.messagesCount })}</small>
       </div>
     </>
   );
