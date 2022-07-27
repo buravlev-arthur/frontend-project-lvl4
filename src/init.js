@@ -1,7 +1,9 @@
+import React from 'react';
 import filter from 'leo-profanity';
 import { setI18n } from './i18n';
 import initSocket from './socket';
 import routes from './routes';
+import App from './components/App';
 
 const init = () => {
   setI18n();
@@ -15,11 +17,7 @@ const init = () => {
     environment: 'production',
   };
 
-  return {
-    actions,
-    pages,
-    rollbarConfig,
-  };
+  return <App config={{ actions, pages, rollbarConfig }} />;
 };
 
 export default init;
