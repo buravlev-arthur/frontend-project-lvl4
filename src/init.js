@@ -7,9 +7,9 @@ const init = () => {
   setI18n();
   const actions = initSocket();
   const { pages } = routes;
-  
+
   filter.loadDictionary('ru');
-  
+
   const rollbarConfig = {
     accessToken: process.env.REACT_APP_ACCESS_TOKEN,
     environment: 'production',
